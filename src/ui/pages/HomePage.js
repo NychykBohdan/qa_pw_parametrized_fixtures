@@ -26,7 +26,7 @@ export class HomePage {
 
   async openMainPage() {
     await this.step(`Open 'Main page'`, async () => {
-      await this.page.goto('https://conduit.mate.academy/', 
+      await this.page.goto('/', 
         {waitUntil: 'domcontentloaded'});
     })
   }

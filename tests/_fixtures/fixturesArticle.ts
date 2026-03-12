@@ -6,16 +6,21 @@ import { EditArticlePage } from '../../src/ui/pages/article/EditArticlePage';
 
 export const test = base.extend<{
   articleWithoutTags;
+  articlesNumber;
   articleWithOneTag;
   createArticlePage;
   viewArticlePage;
   editArticlePage;
 }>({
-  articleWithoutTags: async ({ logger }, use) => {
-    const article = generateNewArticleData(logger);
+  articleWithoutTags: async ({ logger, articlesNumber }, use) => {
+    const articles = Array(articlesNumber);
 
-    await use(article);
-  },
+    for (let i = 0; i < articlesNumber; i++) {
+      articles[i] = generateNewArticleData(logger);
+    }
+
+    await use(articles);
+  }, articlesNumber: [1, {option: true}],
   articleWithOneTag: async ({ logger }, use) => {
     const article = generateNewArticleData(logger, 1);
 
