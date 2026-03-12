@@ -19,7 +19,7 @@ export class CreateArticlePage {
 
   async open() {
     await this.step(`Open 'Create article' page`, async () => {
-      await this.page.goto('/editor');
+      await this.page.goto('/editor', {waitUntil: 'domcontentloaded'});
     });
   }
 

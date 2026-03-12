@@ -23,4 +23,24 @@ export class HomePage {
       await expect(this.yourFeedTab).toBeVisible();
     });
   }
+
+  async openMainPage() {
+    await this.step(`Open 'Main page'`, async () => {
+      await this.page.goto('https://conduit.mate.academy/', 
+        {waitUntil: 'domcontentloaded'});
+    })
+  }
+
+  async assertYourFeedTabIsActive() {
+    await this.step(`Assert 'Your Feed' tab is active`, async () => {
+      await expect(this.yourFeedTab).toHaveClass(/active/);
+    })
+  }
+
+  async assertArticleIsVisible(articleTitle) {
+    await this.step(`Assert article ${articleTitle} is visible`, async () => {
+      await expect(this.page.getByRole('heading', 
+        { name: articleTitle })).toBeVisible();
+    })
+  }
 }

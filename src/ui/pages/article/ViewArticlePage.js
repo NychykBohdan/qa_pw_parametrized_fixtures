@@ -5,6 +5,8 @@ export class ViewArticlePage {
     this.page = page;
     this.userId = userId;
     this.articleTitleHeader = page.getByRole('heading');
+    this.editArticleButton = page.getByRole('link', 
+      { name: 'Edit Article' }).first();
   }
 
   authorLinkInArticleHeader(username) {
@@ -25,7 +27,7 @@ export class ViewArticlePage {
 
   async open(url) {
     await this.step(`Open 'View Article' page`, async () => {
-      await this.page.goto(url);
+      await this.page.goto(url, {waitUntil: 'domcontentloaded'});
     });
   }
 
@@ -56,5 +58,43 @@ export class ViewArticlePage {
         await expect(this.tagListItem(tags[i])).toBeVisible();
       }
     });
+  }
+
+  async assertTagsAreHidden(tags) {
+    await this.step(`Assert tags ${tags} are hidden`, async () => {
+      for (let i = 0; i < tags.length; i++) {
+        await expect(this.tagListItem(tags[i])).toBeHidden();
+      }
+    })
+  }
+
+  async clickEditArticleButton() {
+    await this.step(`Click 'Edit Article' button`, async () => {
+      await this.editArticleButton.click();
+    })
+  }
+
+  async waitAndReloadArticlePage() {
+    await this.step('Wait and reload article page', async () => {
+      await this.page.waitForURL(/\/article\//);
+      await this.page.reload({waitUntil: 'domcontentloaded'});
+    })
+  }
+
+  async followArticleAuthor(username) {
+    await this.step(`Follow article author ${username}`, async() => {
+      await this.page.getByRole('button', {name: 
+        `Follow ${username}`
+      }).first().click();
+    })
+  }
+
+  async assertUserFollowingArticleAuthor(username) {
+    await this.step(`Assert user following article author ${username}`, 
+      async() => {
+        await expect(this.page.getByRole('button', {name: 
+          `Unfollow ${username}`
+        }).first()).toBeVisible();
+      })
   }
 }
